@@ -1,19 +1,44 @@
-fp = open("Obama speech.txt","r")
-x = fp.read()
-speech = []
-speech = list(x.split())
-fp.close()
+import urllib.request
+
+url = "https://www.theguardian.com/us-news/2016/nov/09/hillary-clinton-concession-speech-full-transcript"
+
+f = urllib.request.urlopen(url)
+data = f.read().decode('utf-8')
+
+begin = data.find("Thank you. Thank you all. Thank you.")
+end = data.find("May God bless you and may God bless the United States of America.")
+end += len("May God bless you and may God bless the United States of America.")
+
+print("total = ",len(data))
+print("begin = ",begin)
+print("length = ",end - begin)
+
+speech = data[begin:end]
+
+speech = speech.replace('</div>'," ")
+speech = speech.replace('<div'," ")
+speech = speech.replace('–'," ")
+speech = speech.replace('<p>'," ")
+speech = speech.replace('.'," ")
+speech = speech.replace(','," ")
+speech = speech.replace('</p>'," ")
+speech = speech.replace(','," ")
+speech = speech.replace('href="https://www'," ")
+speech = speech.replace('<br>'," ")
+speech = speech.replace('888-6'," ")
+speech = speech.replace('637-'," ")
+
+speech = speech.split()
+
 
 analyze = {}
 for word in speech:
     analyze[word] = analyze.get(word, 0) + 1
 
-    # dictionary type에서 get 이 무슨 기능인지 검색으로 함 찾아보세요
-    # dictionary type 에서 items() 가 무슨기능인지 검색!
-
 flist = sorted(analyze.items(), key=lambda kv: kv[1], reverse=True)
+print()
 print("number of words is ", len(flist))
-# 이걸 이해하려고 하지말고, 변수만 잘 맞추어 주면 원하는게 나올겁니다. 하여간 이렇게 하면 되는군 선에서 실행시켜보, 본인 재산화 해두고 넘어가세요
+print()
 
 cnt = 0
 for k, v in flist:
